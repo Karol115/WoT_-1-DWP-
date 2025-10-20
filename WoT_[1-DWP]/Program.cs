@@ -10,7 +10,7 @@ namespace WoT__1_DWP_
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension Commands { get; set; }
-        private static string[] ignoredRoles = new[] { "Moderator"};
+        private static string[] ignoredRoles = new[] { "Moderator", "muted", "boty", "Przyjaciel klanu", "Rekrut", "Rezerwista", "Klanowicz" };
 
         static async Task Main(string[] args)
         {
