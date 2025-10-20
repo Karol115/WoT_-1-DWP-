@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.Entities;
 using Microsoft.Extensions.Logging;
 using WoT__1_DWP_.config;
 
@@ -9,6 +10,7 @@ namespace WoT__1_DWP_
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension Commands { get; set; }
+        private static string[] ignoredRoles = new[] { "Moderator"};
 
         static async Task Main(string[] args)
         {
@@ -21,6 +23,7 @@ namespace WoT__1_DWP_
                 Token = config.token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
+                MinimumLogLevel = LogLevel.Error
             };
 
             Client = new DiscordClient(discordConfig);
@@ -30,21 +33,37 @@ namespace WoT__1_DWP_
 
             Client.GuildMemberUpdated += async (s, e) =>
             {
-                var addedRoles = e.Guild.Roles.Values.Where(r => !e.RolesBefore.Contains(r) && e.RolesAfter.Contains(r));
-                var removedRoles = e.Guild.Roles.Values.Where(r => e.RolesBefore.Contains(r) && !e.RolesAfter.Contains(r));
-
                 var channel = await Client.GetChannelAsync(config.channel_id);
 
-                foreach (var role in addedRoles)
-                    await channel.SendMessageAsync($"{e.Member.DisplayName} dostał rangę: {role.Name}");
+                var beforeHighest = e.RolesBefore.Where(r => !ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
+                
+                var afterHighest = e.RolesAfter.Where(r => !ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
 
-                foreach (var role in removedRoles)
-                    await channel.SendMessageAsync($"{e.Member.DisplayName} stracił rangę: {role.Name}");
+                if (beforeHighest == afterHighest)
+                    return;
+
+                var embed = new DiscordEmbedBuilder
+                {
+                    Color = DiscordColor.Blurple,
+                    Timestamp = DateTime.Now
+                };
+
+                if (afterHighest.Position > beforeHighest.Position)
+                {
+                    embed.Title = "Awans!";
+                    embed.Description = $"{e.Member.DisplayName} awansował do: **{afterHighest.Name}**";
+                    embed.Color = DiscordColor.Green;
+                }
+                else
+                {
+                    embed.Title = "Degradacja";
+                    embed.Description = $"{e.Member.DisplayName} został zdegradowany do: **{afterHighest?.Name ?? "nie wiadomo xddd"}**";
+                    embed.Color = DiscordColor.Red;
+                }
+
+                await channel.SendMessageAsync(embed: embed.Build());
 
             };
-
-            /*  Remove warning  TO DO  */
-            
 
 
             await Client.ConnectAsync();
