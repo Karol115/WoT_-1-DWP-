@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace WoT__1_DWP_.config
 {
@@ -11,8 +6,8 @@ namespace WoT__1_DWP_.config
     {
         public string token {  get; set; }
         public string prefix { get; set; }
-        public ulong channel_id { get; set; }
-
+        public ulong channelId { get; set; }
+        public string[] ignoredRoles { get; set; }
 
         public async Task ReadJsonConfig()
         {
@@ -24,7 +19,8 @@ namespace WoT__1_DWP_.config
 
                 this.token = config.token;
                 this.prefix = config.prefix;
-                this.channel_id = config.channel_id;
+                this.channelId = config.channel_id;
+                this.ignoredRoles = config.ignored_roles;
             }
         }
     }
@@ -34,5 +30,6 @@ namespace WoT__1_DWP_.config
         public string token { get; set; }
         public string prefix { get; set; }
         public ulong channel_id { get; set; }
+        public string[] ignored_roles { get; set; }
     }
 }

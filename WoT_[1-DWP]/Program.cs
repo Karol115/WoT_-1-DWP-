@@ -10,7 +10,6 @@ namespace WoT__1_DWP_
     {
         private static DiscordClient Client { get; set; }
         private static CommandsNextExtension Commands { get; set; }
-        private static string[] ignoredRoles = new[] { "Moderator", "muted", "boty", "Przyjaciel klanu", "Rekrut", "Rezerwista", "Klanowicz" };
 
         static async Task Main(string[] args)
         {
@@ -33,11 +32,11 @@ namespace WoT__1_DWP_
 
             Client.GuildMemberUpdated += async (s, e) =>
             {
-                var channel = await Client.GetChannelAsync(config.channel_id);
+                var channel = await Client.GetChannelAsync(config.channelId);
 
-                var beforeHighest = e.RolesBefore.Where(r => !ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
+                var beforeHighest = e.RolesBefore.Where(r => !config.ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
                 
-                var afterHighest = e.RolesAfter.Where(r => !ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
+                var afterHighest = e.RolesAfter.Where(r => !config.ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
 
                 if (beforeHighest == afterHighest)
                     return;

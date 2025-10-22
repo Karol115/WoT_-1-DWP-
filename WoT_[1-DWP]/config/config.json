@@ -1,5 +1,14 @@
 ﻿{
   "token": "{token}",
   "prefix": "!",
-  "channel_id": 1429920616802418698
+  "channel_id": 1429920616802418698,
+  "ignored_roles": [
+    "Moderator",
+    "muted",
+    "boty",
+    "Przyjaciel klanu",
+    "Rekrut",
+    "Rezerwista",
+    "Klanowicz"
+  ]
 }
