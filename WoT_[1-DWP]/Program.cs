@@ -65,7 +65,6 @@ namespace WoT__1_DWP_
 
 
             await Client.ConnectAsync();
-
             await Task.Delay(-1);
         }
 
