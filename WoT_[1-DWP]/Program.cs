@@ -1,5 +1,4 @@
 ﻿using DSharpPlus;
-using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using Microsoft.Extensions.Logging;
 using WoT__1_DWP_.config;
@@ -9,7 +8,7 @@ namespace WoT__1_DWP_
     internal class Program
     {
         private static DiscordClient Client { get; set; }
-        private static CommandsNextExtension Commands { get; set; }
+        //private static CommandsNextExtension Commands { get; set; }
 
         static async Task Main(string[] args)
         {
@@ -66,6 +65,7 @@ namespace WoT__1_DWP_
 
 
             await Client.ConnectAsync();
+
             await Task.Delay(-1);
         }
 
