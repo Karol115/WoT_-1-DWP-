@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace WoT__1_DWP_.config
+namespace Discord_WoT_Bot.config
 {
     internal class JsonReader
     {

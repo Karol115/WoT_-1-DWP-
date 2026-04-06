@@ -1,9 +1,9 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using Microsoft.Extensions.Logging;
-using WoT__1_DWP_.config;
+using Discord_WoT_Bot.config;
 
-namespace WoT__1_DWP_
+namespace Discord_WoT_Bot
 {
     internal class Program
     {
@@ -33,11 +33,12 @@ namespace WoT__1_DWP_
             {
                 var channel = await Client.GetChannelAsync(config.channelId);
 
-                var beforeHighest = e.RolesBefore.Where(r => !config.ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
-                
+                var beforeHighest = e.RolesBefore.Where(r => !config.ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault(); 
                 var afterHighest = e.RolesAfter.Where(r => !config.ignoredRoles.Contains(r.Name)).OrderByDescending(r => r.Position).FirstOrDefault();
 
-                if (beforeHighest == afterHighest)
+				if (afterHighest == null || beforeHighest == null) return;
+
+				if (beforeHighest == afterHighest)
                     return;
 
                 var embed = new DiscordEmbedBuilder
@@ -65,7 +66,26 @@ namespace WoT__1_DWP_
 
 
             await Client.ConnectAsync();
-            await Task.Delay(-1);
+
+            for (int i = 0; i < 3; i++)
+            {
+                await Task.Delay(3000);
+                if (Client.Guilds.Values.Count() <= 0)
+                {
+                    Console.WriteLine($"No Servers Found)");
+                    continue;
+                }
+                else
+                {
+                    foreach (var g in Client.Guilds.Values)
+                    {
+                        Console.WriteLine($"Bot active on: {g.Name} (ID: {g.Id})");
+                    }
+                    break;
+                }
+            }
+
+			await Task.Delay(-1);
         }
 
         private static Task Client_Ready(DiscordClient sender, DSharpPlus.EventArgs.ReadyEventArgs args)
