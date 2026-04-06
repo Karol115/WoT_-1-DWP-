@@ -72,7 +72,7 @@ namespace Discord_WoT_Bot
                 await Task.Delay(3000);
                 if (Client.Guilds.Values.Count() <= 0)
                 {
-                    Console.WriteLine($"No Servers Found)");
+                    Console.WriteLine($"No Servers Found");
                     continue;
                 }
                 else
